@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin: 0; overflow: hidden; background: #111; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // Cena, câmera e renderizador
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75, window.innerWidth / window.innerHeight, 0.1, 1000
+  );
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Geometria e material (troque por SphereGeometry, TorusGeometry etc.)
+  const geometry = new THREE.BoxGeometry(2, 2, 2);
+  const material = new THREE.MeshStandardMaterial({ color: 0x0096ff });
+  const objeto = new THREE.Mesh(geometry, material);
+  scene.add(objeto);
+
+  // Luzes
+  const luzAmbiente = new THREE.AmbientLight(0xffffff, 0.4);
+  scene.add(luzAmbiente);
+
+  const luzPonto = new THREE.PointLight(0xffffff, 1.2);
+  luzPonto.position.set(5, 5, 5);
+  scene.add(luzPonto);
+
+  camera.position.z = 5;
+
+  // Loop de animação
+  function animate() {
+    requestAnimationFrame(animate);
+    objeto.rotation.x += 0.01;
+    objeto.rotation.y += 0.015;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Responsividade
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+
+</body>
+</html>
